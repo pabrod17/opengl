@@ -5,7 +5,7 @@ in vec3 v_normal;
 in vec2 v_tex;
 
 out vec3 frag_3Dpos;
-out vec3 vs_normal;
+out vec3 normal;
 out vec2 vs_tex_coord;
 
 uniform mat4 model;

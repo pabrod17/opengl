@@ -24,6 +24,7 @@ uniform Material material;
 uniform Light light;
 uniform vec3 view_pos;
 
+in vec4 vs_color;
 void main() {
   // Ambient
 
@@ -31,6 +32,7 @@ void main() {
 
   // Specular
 
-  vec3 result = ambient + diffuse + specular;
-  frag_col = vec4(result, 1.0);
+  //vec3 result = ambient + diffuse + specular;
+  //frag_col = vec4(result, 1.0);
+  frag_col = vs_color;
 }
