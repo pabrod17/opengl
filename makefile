@@ -1,6 +1,5 @@
-todo: test hellotriangle helloviewport adaptviewport movingtriangle \
-	spinningcube hellotexture hellotexture2 multitex multitex2 \
-	spinningcube_withlight
+todo: spinningcube_withlight_SKEL
+
 
 LDLIBS=-lGL -lGLEW -lglfw -lm 
 
