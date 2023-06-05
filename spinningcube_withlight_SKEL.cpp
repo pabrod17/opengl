@@ -2,6 +2,10 @@
 // Released as Free Software under the X11 License
 // https://spdx.org/licenses/X11.html
 
+//Ejecucion:
+//gcc spinningcube_withlight_SKEL.cpp textfile.c -lGL -lGLEW -lglfw -lm -o spinningcube_withlight_SKEL
+
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <stdio.h>
@@ -26,8 +30,8 @@ GLuint vao = 0; // Vertext Array Object to set input data
 GLint model_location, view_location, proj_location; // Uniforms for transformation matrices
 
 // Shader names
-const char *vertexFileName = "spinningcube_withlight_vs.glsl";
-const char *fragmentFileName = "spinningcube_withlight_fs.glsl";
+const char *vertexFileName = "spinningcube_withlight_vs_SKEL.glsl";
+const char *fragmentFileName = "spinningcube_withlight_fs_SKEL.glsl";
 
 // Camera
 glm::vec3 camera_pos(0.0f, 0.0f, 3.0f);

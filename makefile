@@ -1,14 +1,13 @@
 todo: spinningcube_withlight_SKEL
 
-
-LDLIBS=-lGL -lGLEW -lglfw -lm 
-
-spinningcube_withlight: spinningcube_withlight_SKEL.cpp textfile.c
+spinningcube_withlight_SKEL: spinningcube_withlight_SKEL.cpp textfile.c
+	gcc $^ -lGL -lGLEW -lglfw -lm -o $@
 
 clean:
 	rm -f *.o *~
 
 cleanall: clean
-	rm -f test hellotriangle helloviewport adaptviewport movingtriangle \
-		spinningcube hellotexture hellotexture2 multitex multitex2 \
-		spinningcube_withlight
+	rm -f spinningcube_withlight_SKEL 
+
+test: cleanall spinningcube_withlight_SKEL
+
