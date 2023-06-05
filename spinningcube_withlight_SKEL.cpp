@@ -28,6 +28,9 @@ void render(double);
 GLuint shader_program = 0; // shader program to set render pipeline
 GLuint vao = 0; // Vertext Array Object to set input data
 GLint model_location, view_location, proj_location; // Uniforms for transformation matrices
+GLint normal_location;
+GLint light_position_location, light_ambient_location, light_diffuse_location, light_specular_location;
+GLint camera_position_location;
 
 // Shader names
 const char *vertexFileName = "spinningcube_withlight_vs_SKEL.glsl";
@@ -235,6 +238,16 @@ int main() {
   model_location = glGetUniformLocation(shader_program, "model");
   view_location = glGetUniformLocation(shader_program, "view");
   proj_location = glGetUniformLocation(shader_program, "projection");
+  normal_location = glGetUniformLocation(shader_program, "normal_matrix");
+
+  // normal_location = glGetUniformLocation(shader_program, "normal_matrix");
+
+  // light_position_location = glGetUniformLocation(shader_program, "light.position");
+  // light_ambient_location = glGetUniformLocation(shader_program, "light.ambient");
+  // light_diffuse_location = glGetUniformLocation(shader_program, "light.diffuse");
+  // light_specular_location = glGetUniformLocation(shader_program, "light.specular");
+
+  camera_position_location = glGetUniformLocation(shader_program, "view_pos");
   // [...]
 
 // Render loop
@@ -266,7 +279,6 @@ void render(double currentTime) {
 
   glm::mat4 model_matrix, view_matrix, proj_matrix;
 
-  model_matrix = glm::mat4(1.f);
   view_matrix = glm::lookAt(                 camera_pos,  // pos
                             glm::vec3(0.0f, 0.0f, 0.0f),  // target
                             glm::vec3(0.0f, 1.0f, 0.0f)); // up
@@ -274,11 +286,28 @@ void render(double currentTime) {
   // Moving cube
   // model_matrix = glm::rotate(model_matrix,
   //   [...]
-  //
+  model_matrix = glm::mat4(1.f);
+  model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(0.0f, 0.0f, -4.0f));
+  model_matrix = glm::translate(model_matrix,
+                             glm::vec3(sinf(2.1f * f) * 0.5f,
+                                       cosf(1.7f * f) * 0.5f,
+                                       sinf(1.3f * f) * cosf(1.5f * f) * 2.0f));
+
+  model_matrix = glm::rotate(model_matrix,
+                          glm::radians((float)currentTime * 45.0f),
+                          glm::vec3(0.0f, 1.0f, 0.0f));
+  model_matrix = glm::rotate(model_matrix,
+                          glm::radians((float)currentTime * 81.0f),
+                          glm::vec3(1.0f, 0.0f, 0.0f));
+
+  glUniformMatrix4fv(model_location, 1, GL_FALSE, glm::value_ptr(model_matrix));
   // Projection
   // proj_matrix = glm::perspective(glm::radians(50.0f),
   //   [...]
-  //
+  proj_matrix = glm::perspective(glm::radians(50.0f),
+                                 (float) gl_width / (float) gl_height,
+                                 0.1f, 1000.0f);
+  glUniformMatrix4fv(proj_location, 1, GL_FALSE, glm::value_ptr(proj_matrix));
   // Normal matrix: normal vectors to world coordinates
 
   glDrawArrays(GL_TRIANGLES, 0, 36);
