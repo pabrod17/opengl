@@ -1,4 +1,4 @@
-#version 130
+#version 330
 
 struct Material {
   vec3 ambient;
@@ -38,7 +38,7 @@ void main() {
   // Specular
   vec3 view_dir = normalize(view_pos - frag_3Dpos);
   vec3 reflect_dir = reflect(-light_dir, normal);
-  float spec = pow(max(dot(view_dir, reflect_dir), 10.0), material.shininess);
+  float spec = pow(max(dot(view_dir, reflect_dir), 0.0), material.shininess);
   vec3 specular = light.specular * spec * material.specular;
 
   vec3 result = ambient + diffuse + specular;

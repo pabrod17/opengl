@@ -48,11 +48,11 @@ glm::vec3 light_specular(1.0f, 1.0f, 1.0f);
 
 // Material
 glm::vec3 material_ambient(1.0f, 0.5f, 0.31f);
-//glm::vec3 material_diffuse(1.0f, 0.5f, 0.31f);
-//glm::vec3 material_specular(0.5f, 0.5f, 0.5f);
+glm::vec3 material_diffuse(1.0f, 0.5f, 0.31f);
+glm::vec3 material_specular(0.5f, 0.5f, 0.5f);
 
-GLint material_diffuse = 0;
-GLint material_specular = 1;
+//GLint material_diffuse = 0;
+//GLint material_specular = 1;
 const GLfloat material_shininess = 32.0f;
 
 int main() {
@@ -341,9 +341,8 @@ void render(double currentTime) {
 
   glUniform1f(material_shininess_location, material_shininess);
   glUniform3f(material_ambient_location, material_ambient.x, material_ambient.y, material_ambient.z);
-  glUniform1i(material_diffuse_location, material_diffuse);
-  glUniform1i(material_specular_location, material_specular);
-
+  glUniform3f(material_diffuse_location, material_diffuse.x, material_diffuse.y, material_diffuse.z);
+  glUniform3f(material_specular_location, material_specular.x, material_specular.y, material_specular.z);
 
   glUniform3f(camera_position_location, camera_pos.x, camera_pos.y, camera_pos.z);
 
