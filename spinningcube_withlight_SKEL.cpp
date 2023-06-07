@@ -27,9 +27,12 @@ void render(double);
 
 GLuint shader_program = 0; // shader program to set render pipeline
 GLuint vao = 0; // Vertext Array Object to set input data
+GLuint vao2 = 0; 
 GLint model_location, view_location, proj_location; // Uniforms for transformation matrices
 GLint normal_location;
 GLint light_position_location, light_ambient_location, light_diffuse_location, light_specular_location;
+GLint light_position_location2, light_ambient_location2, light_diffuse_location2, light_specular_location2;
+
 GLint material_ambient_location, material_diffuse_location, material_specular_location, material_shininess_location;  
 GLint camera_position_location;
 
@@ -45,6 +48,9 @@ glm::vec3 light_pos(10.0f, 1.0f, 0.5f);
 glm::vec3 light_ambient(0.2f, 0.2f, 0.2f);
 glm::vec3 light_diffuse(0.5f, 0.5f, 0.5f);
 glm::vec3 light_specular(1.0f, 1.0f, 1.0f);
+
+// Lighting Tetraedro
+glm::vec3 light_pos2(-10.0f, 1.0f, 0.5f);
 
 // Material
 glm::vec3 material_ambient(1.0f, 0.5f, 0.31f);
@@ -162,6 +168,7 @@ int main() {
   // far ---> 1        2
   //       6        5
   //
+  
   const GLfloat vertex_positions[] = {
 
     //positions                   //Normals
@@ -214,7 +221,37 @@ int main() {
      0.25f,  0.25f, -0.25f,     0.0f, 1.0f, 0.0f,    // 3
   };
 
-// Vertex Buffer Object (for vertex coordinates)
+  // Tetraedro to be rendered
+  // Cube to be rendered
+  //
+  //           3
+  //
+  //           1   
+  //     
+  //        6       5
+  //
+  const GLfloat vertex_positions_tetraedro[] = {
+
+    //positions                   //Normals
+    0.0f,  0.25f, 0.0f,        0.0f, -1.0f, 0.0f,    // 3
+    0.0f,  -0.25f,  0.5f,      0.0f, -1.0f, 0.0f,    // 6
+    -0.25f, -0.25f, 0.25f,     0.0f, -1.0f, 0.0f,    // 1
+
+    0.0f,  0.25f, 0.0f,        0.0f, -1.0f, 0.0f,    // 3
+    -0.25f, -0.25f, 0.25f,     0.0f, -1.0f, 0.0f,    // 1
+    0.25f, -0.25f,  0.25f,      0.0f, -1.0f, 0.0f,   // 5
+
+    0.0f,  0.25f, 0.0f,        0.0f, -1.0f, 0.0f,    // 3
+    0.0f,  -0.25f,  0.5f,      0.0f, -1.0f, 0.0f,    // 6
+    0.25f, -0.25f,  0.25f,     0.0f, -1.0f, 0.0f,    // 5
+
+    0.0f,  -0.25f,  0.5f,         0.0f, -1.0f, 0.0f,   // 6
+    -0.25f, -0.25f, 0.25f,     0.0f, -1.0f, 0.0f,    // 1
+    0.25f, -0.25f,  0.25f,     0.0f, -1.0f, 0.0f,    // 5
+
+  };
+
+  // Vertex Buffer Object (for vertex coordinates)
   GLuint vbo = 0;
   glGenBuffers(1, &vbo);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -261,8 +298,16 @@ int main() {
   material_specular_location = glGetUniformLocation(shader_program, "material.specular");
 
 
+ // Tetraedro:
+
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_positions_tetraedro), vertex_positions_tetraedro, GL_STATIC_DRAW);
+
+  light_position_location2 = glGetUniformLocation(shader_program, "light2.position");
+  light_ambient_location2 = glGetUniformLocation(shader_program, "light2.ambient");
+  light_diffuse_location2 = glGetUniformLocation(shader_program, "light2.diffuse");
+  light_specular_location2 = glGetUniformLocation(shader_program, "light2.specular");
+
   camera_position_location = glGetUniformLocation(shader_program, "view_pos");
-  // [...]
 
 // Render loop
   while(!glfwWindowShouldClose(window)) {
@@ -309,11 +354,11 @@ void render(double currentTime) {
   //                                     cosf(1.7f * f) * 0.5f,
   //                                     sinf(1.3f * f) * cosf(1.5f * f) * 2.0f));
   model_matrix = glm::rotate(model_matrix,
-                          glm::radians((float)currentTime * 20.0f),
-                          glm::vec3(0.0f, 1.0f, 0.0f));
+                      glm::radians((float)currentTime * 20.0f),
+                      glm::vec3(0.0f, 1.0f, 0.0f));
   model_matrix = glm::rotate(model_matrix,
-                          glm::radians((float)currentTime * 40.0f),
-                          glm::vec3(1.0f, 0.0f, 0.0f));
+                      glm::radians((float)currentTime * 40.0f),
+                      glm::vec3(1.0f, 0.0f, 0.0f));
 
   //glUniformMatrix4fv(model_location, 1, GL_FALSE, glm::value_ptr(model_matrix));
 
@@ -327,7 +372,7 @@ void render(double currentTime) {
                                  0.1f, 1000.0f);
 
 
-// Normal matrix: normal vectors to world coordinates
+  // Normal matrix: normal vectors to world coordinates
   normal_matrix = glm::transpose(glm::inverse(glm::mat3(model_matrix)));
 
   //glUniformMatrix4fv(proj_location, 1, GL_FALSE, glm::value_ptr(proj_matrix));
@@ -338,6 +383,10 @@ void render(double currentTime) {
   glUniform3f(light_diffuse_location, light_diffuse.x, light_diffuse.y, light_diffuse.z);
   glUniform3f(light_specular_location, light_specular.x, light_specular.y, light_specular.z);
 
+  glUniform3f(light_ambient_location2, light_ambient.x, light_ambient.y, light_ambient.z);
+  glUniform3f(light_position_location2, light_pos2.x, light_pos2.y, light_pos2.z);
+  glUniform3f(light_diffuse_location2, light_diffuse.x, light_diffuse.y, light_diffuse.z);
+  glUniform3f(light_specular_location2, light_specular.x, light_specular.y, light_specular.z);
 
   glUniform1f(material_shininess_location, material_shininess);
   glUniform3f(material_ambient_location, material_ambient.x, material_ambient.y, material_ambient.z);
@@ -355,6 +404,30 @@ void render(double currentTime) {
 
 
   glDrawArrays(GL_TRIANGLES, 0, 36);
+
+  // tetraedro
+
+  glBindVertexArray(vao2);
+
+  model_matrix = glm::mat4(1.f);
+  model_matrix = glm::translate(model_matrix, glm::vec3(.75f, 0.0f, 0.0f));
+
+  proj_matrix = glm::perspective(glm::radians(50.0f),
+                                 (float) gl_width / (float) gl_height,
+                                 0.1f, 1000.0f);
+
+
+  // Normal matrix: normal vectors to world coordinates
+  normal_matrix = glm::transpose(glm::inverse(glm::mat3(model_matrix)));
+
+  glUniform1f(material_shininess_location, material_shininess);
+
+  glUniformMatrix4fv(model_location, 1, GL_FALSE, &model_matrix[0][0]);
+  glUniformMatrix4fv(view_location, 1, GL_FALSE, &view_matrix[0][0]);
+  glUniformMatrix4fv(proj_location, 1, GL_FALSE, &proj_matrix[0][0]);
+  glUniformMatrix4fv(normal_location, 1, GL_FALSE, &normal_matrix[0][0]);
+
+  glDrawArrays(GL_TRIANGLES, 0, 12);
 }
 
 void processInput(GLFWwindow *window) {
