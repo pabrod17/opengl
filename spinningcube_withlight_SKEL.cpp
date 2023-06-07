@@ -272,6 +272,33 @@ int main() {
   // Unbind vao
   glBindVertexArray(0);
 
+// Crear y vincular el Vertex Array Object (VAO) para el tetraedro
+GLuint vao2 = 0;
+glGenVertexArrays(1, &vao2);
+
+// Crear y vincular el Vertex Buffer Object (VBO) para el tetraedro
+GLuint vbo2 = 0;
+glGenBuffers(1, &vbo2);
+glBindBuffer(GL_ARRAY_BUFFER, vbo2);
+glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_positions_tetraedro), vertex_positions_tetraedro, GL_STATIC_DRAW);
+
+// Especificar los atributos de vértice para el tetraedro
+// 0: posición del vértice (x, y, z)
+glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+glEnableVertexAttribArray(0);
+
+// 1: normales de vértice (x, y, z)
+glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+glEnableVertexAttribArray(1);
+
+// Desvincular el VBO y el VAO
+glBindBuffer(GL_ARRAY_BUFFER, 0);
+glBindVertexArray(0);
+
+// ...
+
+// Para renderizar el tetraedro
+
   // Uniforms
   // - Model matrix
   // - View matrix
@@ -299,7 +326,6 @@ int main() {
 
 
  // Tetraedro:
-
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_positions_tetraedro), vertex_positions_tetraedro, GL_STATIC_DRAW);
 
   light_position_location2 = glGetUniformLocation(shader_program, "light2.position");
@@ -402,21 +428,23 @@ void render(double currentTime) {
 
   glUniformMatrix4fv(normal_location, 1, GL_FALSE, &normal_matrix[0][0]);
 
-
   glDrawArrays(GL_TRIANGLES, 0, 36);
 
   // tetraedro
 
-  glBindVertexArray(vao2);
-
   model_matrix = glm::mat4(1.f);
-  model_matrix = glm::translate(model_matrix, glm::vec3(.75f, 0.0f, 0.0f));
+  model_matrix = glm::translate(model_matrix, glm::vec3(-.75f, 0.0f, 0.0f));
 
   proj_matrix = glm::perspective(glm::radians(50.0f),
                                  (float) gl_width / (float) gl_height,
                                  0.1f, 1000.0f);
 
-
+  model_matrix = glm::rotate(model_matrix,
+                      glm::radians((float)currentTime * 20.0f),
+                      glm::vec3(0.0f, 1.0f, 0.0f));
+  model_matrix = glm::rotate(model_matrix,
+                      glm::radians((float)currentTime * 40.0f),
+                      glm::vec3(1.0f, 0.0f, 0.0f));
   // Normal matrix: normal vectors to world coordinates
   normal_matrix = glm::transpose(glm::inverse(glm::mat3(model_matrix)));
 
@@ -427,6 +455,7 @@ void render(double currentTime) {
   glUniformMatrix4fv(proj_location, 1, GL_FALSE, &proj_matrix[0][0]);
   glUniformMatrix4fv(normal_location, 1, GL_FALSE, &normal_matrix[0][0]);
 
+  glBindVertexArray(vao2);
   glDrawArrays(GL_TRIANGLES, 0, 12);
 }
 
