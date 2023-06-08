@@ -178,54 +178,54 @@ int main() {
   
   const GLfloat vertex_positions[] = {
 
-    //positions                   //Normals
-    -0.25f, -0.25f, -0.25f,     0.0f, 0.0f, -1.0f,    // 1  
-    -0.25f,  0.25f, -0.25f,     0.0f, 0.0f, -1.0f,    // 0
-     0.25f, -0.25f, -0.25f,     0.0f, 0.0f, -1.0f,    // 2
+    //positions                   //Normals       // Texture
+    -0.25f, -0.25f, -0.25f,  0.0f, 0.0f, -1.0f,  0.0f, 0.0f,  // 1
+    -0.25f,  0.25f, -0.25f,  0.0f, 0.0f, -1.0f,  0.0f, 1.0f,  // 0
+     0.25f, -0.25f, -0.25f,  0.0f, 0.0f, -1.0f,  1.0f, 0.0f,  // 2
 
-     0.25f,  0.25f, -0.25f,     0.0f, 0.0f, -1.0f,    // 3
-     0.25f, -0.25f, -0.25f,     0.0f, 0.0f, -1.0f,    // 2
-    -0.25f,  0.25f, -0.25f,     0.0f, 0.0f, -1.0f,    // 0
+     0.25f,  0.25f, -0.25f,  0.0f, 0.0f, -1.0f,  1.0f, 1.0f,  // 3
+     0.25f, -0.25f, -0.25f,  0.0f, 0.0f, -1.0f,  1.0f, 0.0f,  // 2
+    -0.25f,  0.25f, -0.25f,  0.0f, 0.0f, -1.0f,  0.0f, 1.0f,  // 0
 
-     0.25f, -0.25f, -0.25f,     1.0f, 0.0f, 0.0f,    // 2
-     0.25f,  0.25f, -0.25f,     1.0f, 0.0f, 0.0f,    // 3
-     0.25f, -0.25f,  0.25f,     1.0f, 0.0f, 0.0f,    // 5
+     0.25f, -0.25f, -0.25f,  1.0f, 0.0f, 0.0f,   0.0f, 0.0f,  // 2
+     0.25f,  0.25f, -0.25f,  1.0f, 0.0f, 0.0f,   1.0f, 0.0f,  // 3
+     0.25f, -0.25f,  0.25f,  1.0f, 0.0f, 0.0f,   0.0f, 1.0f,  // 5
 
-     0.25f,  0.25f,  0.25f,     1.0f, 0.0f, 0.0f,    // 4
-     0.25f, -0.25f,  0.25f,     1.0f, 0.0f, 0.0f,    // 5
-     0.25f,  0.25f, -0.25f,     1.0f, 0.0f, 0.0f,    // 3
+     0.25f,  0.25f,  0.25f,  1.0f, 0.0f, 0.0f,   1.0f, 1.0f,  // 4
+     0.25f, -0.25f,  0.25f,  1.0f, 0.0f, 0.0f,   0.0f, 1.0f,  // 5
+     0.25f,  0.25f, -0.25f,  1.0f, 0.0f, 0.0f,   1.0f, 0.0f,  // 3
 
-     0.25f, -0.25f,  0.25f,     0.0f, 0.0f, 1.0f,    // 5
-     0.25f,  0.25f,  0.25f,     0.0f, 0.0f, 1.0f,    // 4
-    -0.25f, -0.25f,  0.25f,     0.0f, 0.0f, 1.0f,    // 6
+     0.25f, -0.25f,  0.25f,  0.0f, 0.0f, 1.0f,   0.0f, 0.0f,  // 5
+     0.25f,  0.25f,  0.25f,  0.0f, 0.0f, 1.0f,   0.0f, 1.0f,  // 4
+    -0.25f, -0.25f,  0.25f,  0.0f, 0.0f, 1.0f,   1.0f, 0.0f,  // 6
 
-    -0.25f,  0.25f,  0.25f,     0.0f, 0.0f, 1.0f,   // 7
-    -0.25f, -0.25f,  0.25f,     0.0f, 0.0f, 1.0f,   // 6
-     0.25f,  0.25f,  0.25f,     0.0f, 0.0f, 1.0f,   // 4
+    -0.25f,  0.25f,  0.25f,  0.0f, 0.0f, 1.0f,   1.0f, 1.0f,  // 7
+    -0.25f, -0.25f,  0.25f,  0.0f, 0.0f, 1.0f,   1.0f, 0.0f,  // 6
+     0.25f,  0.25f,  0.25f,  0.0f, 0.0f, 1.0f,   0.0f, 1.0f,  // 4
 
-    -0.25f, -0.25f,  0.25f,     -1.0f, 0.0f, 0.0f,   // 6
-    -0.25f,  0.25f,  0.25f,     -1.0f, 0.0f, 0.0f,   // 7
-    -0.25f, -0.25f, -0.25f,     -1.0f, 0.0f, 0.0f,   // 1
+    -0.25f, -0.25f,  0.25f,  -1.0f, 0.0f, 0.0f,  0.0f, 0.0f,  // 6
+    -0.25f,  0.25f,  0.25f,  -1.0f, 0.0f, 0.0f,  1.0f, 0.0f,  // 7
+    -0.25f, -0.25f, -0.25f,  -1.0f, 0.0f, 0.0f,  0.0f, 1.0f,  // 1
 
-    -0.25f,  0.25f, -0.25f,     -1.0f, 0.0f, 0.0f,    // 0
-    -0.25f, -0.25f, -0.25f,     -1.0f, 0.0f, 0.0f,    // 1
-    -0.25f,  0.25f,  0.25f,     -1.0f, 0.0f, 0.0f,    // 7
+    -0.25f,  0.25f, -0.25f,  -1.0f, 0.0f, 0.0f,  1.0f, 1.0f,  // 0
+    -0.25f, -0.25f, -0.25f,  -1.0f, 0.0f, 0.0f,  0.0f, 1.0f,  // 1
+    -0.25f,  0.25f,  0.25f,  -1.0f, 0.0f, 0.0f,  1.0f, 0.0f,  // 7
 
-     0.25f, -0.25f, -0.25f,     0.0f, -1.0f, 0.0f,    // 2
-     0.25f, -0.25f,  0.25f,     0.0f, -1.0f, 0.0f,  // 5
-    -0.25f, -0.25f, -0.25f,     0.0f, -1.0f, 0.0f,    // 1
+     0.25f, -0.25f, -0.25f,  0.0f, -1.0f, 0.0f,  0.0f, 0.0f,  // 2
+     0.25f, -0.25f,  0.25f,  0.0f, -1.0f, 0.0f,  1.0f, 0.0f,  // 5
+    -0.25f, -0.25f, -0.25f,  0.0f, -1.0f, 0.0f,  0.0f, 1.0f,  // 1
 
-    -0.25f, -0.25f,  0.25f,     0.0f, -1.0f, 0.0f,    // 6
-    -0.25f, -0.25f, -0.25f,     0.0f, -1.0f, 0.0f,    // 1
-     0.25f, -0.25f,  0.25f,     0.0f, -1.0f, 0.0f,    // 5
+    -0.25f, -0.25f,  0.25f,  0.0f, -1.0f, 0.0f,  1.0f, 1.0f,  // 6
+    -0.25f, -0.25f, -0.25f,  0.0f, -1.0f, 0.0f,  0.0f, 1.0f,  // 1
+     0.25f, -0.25f,  0.25f,  0.0f, -1.0f, 0.0f,  1.0f, 0.0f,  // 5
 
-     0.25f,  0.25f,  0.25f,     0.0f, 1.0f, 0.0f,    // 4
-     0.25f,  0.25f, -0.25f,     0.0f, 1.0f, 0.0f,    // 3
-    -0.25f,  0.25f,  0.25f,     0.0f, 1.0f, 0.0f,    // 7
+     0.25f,  0.25f,  0.25f,  0.0f, 1.0f, 0.0f,   0.0f, 0.0f,  // 4
+     0.25f,  0.25f, -0.25f,  0.0f, 1.0f, 0.0f,   1.0f, 0.0f,  // 3
+    -0.25f,  0.25f,  0.25f,  0.0f, 1.0f, 0.0f,   0.0f, 1.0f,  // 7
 
-    -0.25f,  0.25f, -0.25f,     0.0f, 1.0f, 0.0f,     // 0
-    -0.25f,  0.25f,  0.25f,     0.0f, 1.0f, 0.0f,    // 7
-     0.25f,  0.25f, -0.25f,     0.0f, 1.0f, 0.0f,    // 3
+    -0.25f,  0.25f, -0.25f,  0.0f, 1.0f, 0.0f,   1.0f, 1.0f,  // 0
+    -0.25f,  0.25f,  0.25f,  0.0f, 1.0f, 0.0f,   0.0f, 1.0f,  // 7
+     0.25f,  0.25f, -0.25f,  0.0f, 1.0f, 0.0f,   1.0f, 0.0f,  // 3
   };
 
   // Tetraedro to be rendered
@@ -239,42 +239,42 @@ int main() {
   //
   const GLfloat vertex_positions_tetraedro[] = {
 
-    //positions                   //Normals
-    0.0f,  0.25f, -0.15f,        0.0f, -1.0f, 0.0f,    // 3
-    0.0f,  -0.25f,  0.30f,       0.0f, -1.0f, 0.0f,    // 6
-    -0.25f, -0.25f, -0.15f,      0.0f, -1.0f, 0.0f,    // 1
+    //positions                   //Normals             // Texture
+    0.0f,  0.25f, -0.15f,        0.0f, -1.0f, 0.0f,     0.5f,  0.25f,   // 3
+    0.0f,  -0.25f,  0.30f,       0.0f, -1.0f, 0.0f,     0.0f,  0.25f,   // 6
+    -0.25f, -0.25f, -0.15f,      0.0f, -1.0f, 0.0f,     0.0f,  0.25f,   // 1
 
-    0.0f,  0.25f, -0.15f,        0.0f, -1.0f, 0.0f,    // 3
-    -0.25f, -0.25f, -0.15f,      0.0f, -1.0f, 0.0f,    // 1
-    0.25f, -0.25f,  -0.15f,      0.0f, -1.0f, 0.0f,   // 5
+    0.0f,  0.25f, -0.15f,        0.0f, -1.0f, 0.0f,     0.5f,  0.25f,   // 3
+    -0.25f, -0.25f, -0.15f,      0.0f, -1.0f, 0.0f,     0.0f,  0.25f,   // 1
+    0.25f, -0.25f,  -0.15f,      0.0f, -1.0f, 0.0f,     0.0f,  0.25f,   // 5
 
-    0.0f,  0.25f, -0.15f,        0.0f, -1.0f, 0.0f,    // 3
-    0.0f,  -0.25f,  0.30f,      0.0f, -1.0f, 0.0f,    // 6
-    0.25f, -0.25f,  -0.15f,      0.0f, -1.0f, 0.0f,    // 5
+    0.0f,  0.25f, -0.15f,        0.0f, -1.0f, 0.0f,     0.5f,  0.25f,   // 3
+    0.0f,  -0.25f,  0.30f,       0.0f, -1.0f, 0.0f,     0.25f, 0.5f,    // 6
+    0.25f, -0.25f,  -0.15f,      0.0f, -1.0f, 0.0f,     0.0f,  0.25f,   // 5
 
-    0.0f,  -0.25f,  0.30f,      0.0f, -1.0f, 0.0f,   // 6
-    -0.25f, -0.25f, -0.15f,      0.0f, -1.0f, 0.0f,    // 1
-    0.25f, -0.25f,  -0.15f,      0.0f, -1.0f, 0.0f,    // 5
+    0.0f,  -0.25f,  0.30f,       0.0f, -1.0f, 0.0f,     0.0f,  0.25f,   // 6
+    -0.25f, -0.25f, -0.15f,      0.0f, -1.0f, 0.0f,     0.0f,  0.25f,   // 1
+    0.25f, -0.25f,  -0.15f,      0.0f, -1.0f, 0.0f,     0.0f,  0.25f,   // 5
 
   };
 
   // Vertex Buffer Object (for vertex coordinates)
   GLuint vbo = 0;
-  glGenBuffers(1, &vbo);
+  glGenBuffers(3, &vbo);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_positions), vertex_positions, GL_STATIC_DRAW);
 
   // Vertex attributes
   // 0: vertex position (x, y, z)
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8*sizeof(float), (void*)0);
   glEnableVertexAttribArray(0);
 
   // 1: vertex normals (x, y, z)
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)(3*sizeof(float)));
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8*sizeof(float), (void*)(3*sizeof(float)));
   glEnableVertexAttribArray(1);
 
   // 2: text coord (s, t)
-  glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(6 * sizeof(float)));
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
   glEnableVertexAttribArray(2);
 
   // Unbind vbo (it was conveniently registered by VertexAttribPointer)
@@ -289,21 +289,21 @@ int main() {
 
   // Crear y vincular el Vertex Buffer Object (VBO) para el tetraedro
   GLuint vbo2 = 0;
-  glGenBuffers(1, &vbo2);
+  glGenBuffers(3, &vbo2);
   glBindBuffer(GL_ARRAY_BUFFER, vbo2);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_positions_tetraedro), vertex_positions_tetraedro, GL_STATIC_DRAW);
 
   // Especificar los atributos de vértice para el tetraedro
   // 0: posición del vértice (x, y, z)
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
   glEnableVertexAttribArray(0);
 
   // 1: normales de vértice (x, y, z)
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
   glEnableVertexAttribArray(1);
 
   // 2: text coord (s, t)
-  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(6 * sizeof(float)));
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
   glEnableVertexAttribArray(2);
 
   // Desvincular el VBO y el VAO
