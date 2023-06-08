@@ -1,11 +1,10 @@
 #version 330
 
 struct Material {
-  vec3 ambient;
-  vec3 diffuse;
-  vec3 specular;
-  float shininess;
-};
+  sampler2D diffuse;
+  vec3      specular;
+  float     shininess;
+}; 
 
 struct Light {
   vec3 position;
@@ -27,20 +26,19 @@ uniform vec3 view_pos;
 
 void main() {
 
-
   // Ambient
-  vec3 ambient = light.ambient * material.ambient;
+  vec3 ambient = light.ambient * texture(material.diffuse, vs_tex_coord).rgb;
   vec3 light_dir = normalize(light.position - frag_3Dpos);
 
-  vec3 ambient2 = light2.ambient * material.ambient;
+  vec3 ambient2 = light2.ambient * texture(material.diffuse, vs_tex_coord).rgb;
   vec3 light_dir2 = normalize(light2.position - frag_3Dpos);
 
   // Diffuse
   float diff = max(dot(normal, light_dir), 0.0);
-  vec3 diffuse = light.diffuse * diff * material.diffuse;
+  vec3 diffuse = light.diffuse * diff * texture(material.diffuse, vs_tex_coord).rgb;
 
   float diff2 = max(dot(normal, light_dir2), 0.0);
-  vec3 diffuse2 = light2.diffuse * diff2 * material.diffuse;
+  vec3 diffuse2 = light2.diffuse * diff2 * texture(material.diffuse, vs_tex_coord).rgb;
   
   // Specular
   vec3 view_dir = normalize(view_pos - frag_3Dpos);

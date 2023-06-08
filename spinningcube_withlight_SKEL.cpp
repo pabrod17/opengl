@@ -9,6 +9,9 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <stdio.h>
+// El siguiente fichero es necesario y se obtiene https://github.com/nothings/stb/blob/master/stb_image.h
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 // GLM library to deal with matrix operations
 #include <glm/glm.hpp>
@@ -24,6 +27,9 @@ int gl_height = 480;
 void glfw_window_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 void render(double);
+
+// Metodo para cargar la textura
+unsigned int load_textura(const char* path);
 
 GLuint shader_program = 0; // shader program to set render pipeline
 GLuint vao = 0; // Vertext Array Object to set input data
@@ -53,13 +59,14 @@ glm::vec3 light_specular(1.0f, 1.0f, 1.0f);
 glm::vec3 light_pos2(-10.0f, 1.0f, 0.5f);
 
 // Material
-glm::vec3 material_ambient(1.0f, 0.5f, 0.31f);
-glm::vec3 material_diffuse(1.0f, 0.5f, 0.31f);
 glm::vec3 material_specular(0.5f, 0.5f, 0.5f);
 
 //GLint material_diffuse = 0;
 //GLint material_specular = 1;
 const GLfloat material_shininess = 32.0f;
+
+// Textura
+unsigned int diffuse_map;
 
 int main() {
   // start GL context and O/S window using the GLFW helper library
@@ -233,21 +240,21 @@ int main() {
   const GLfloat vertex_positions_tetraedro[] = {
 
     //positions                   //Normals
-    0.0f,  0.25f, 0.0f,        0.0f, -1.0f, 0.0f,    // 3
-    0.0f,  -0.25f,  0.5f,      0.0f, -1.0f, 0.0f,    // 6
-    -0.25f, -0.25f, 0.25f,     0.0f, -1.0f, 0.0f,    // 1
+    0.0f,  0.25f, -0.15f,        0.0f, -1.0f, 0.0f,    // 3
+    0.0f,  -0.25f,  0.30f,       0.0f, -1.0f, 0.0f,    // 6
+    -0.25f, -0.25f, -0.15f,      0.0f, -1.0f, 0.0f,    // 1
 
-    0.0f,  0.25f, 0.0f,        0.0f, -1.0f, 0.0f,    // 3
-    -0.25f, -0.25f, 0.25f,     0.0f, -1.0f, 0.0f,    // 1
-    0.25f, -0.25f,  0.25f,      0.0f, -1.0f, 0.0f,   // 5
+    0.0f,  0.25f, -0.15f,        0.0f, -1.0f, 0.0f,    // 3
+    -0.25f, -0.25f, -0.15f,      0.0f, -1.0f, 0.0f,    // 1
+    0.25f, -0.25f,  -0.15f,      0.0f, -1.0f, 0.0f,   // 5
 
-    0.0f,  0.25f, 0.0f,        0.0f, -1.0f, 0.0f,    // 3
-    0.0f,  -0.25f,  0.5f,      0.0f, -1.0f, 0.0f,    // 6
-    0.25f, -0.25f,  0.25f,     0.0f, -1.0f, 0.0f,    // 5
+    0.0f,  0.25f, -0.15f,        0.0f, -1.0f, 0.0f,    // 3
+    0.0f,  -0.25f,  0.30f,      0.0f, -1.0f, 0.0f,    // 6
+    0.25f, -0.25f,  -0.15f,      0.0f, -1.0f, 0.0f,    // 5
 
-    0.0f,  -0.25f,  0.5f,         0.0f, -1.0f, 0.0f,   // 6
-    -0.25f, -0.25f, 0.25f,     0.0f, -1.0f, 0.0f,    // 1
-    0.25f, -0.25f,  0.25f,     0.0f, -1.0f, 0.0f,    // 5
+    0.0f,  -0.25f,  0.30f,      0.0f, -1.0f, 0.0f,   // 6
+    -0.25f, -0.25f, -0.15f,      0.0f, -1.0f, 0.0f,    // 1
+    0.25f, -0.25f,  -0.15f,      0.0f, -1.0f, 0.0f,    // 5
 
   };
 
@@ -266,38 +273,46 @@ int main() {
   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)(3*sizeof(float)));
   glEnableVertexAttribArray(1);
 
+  // 2: text coord (s, t)
+  glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(6 * sizeof(float)));
+  glEnableVertexAttribArray(2);
+
   // Unbind vbo (it was conveniently registered by VertexAttribPointer)
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 
   // Unbind vao
   glBindVertexArray(0);
 
-// Crear y vincular el Vertex Array Object (VAO) para el tetraedro
-GLuint vao2 = 0;
-glGenVertexArrays(1, &vao2);
+  // Crear y vincular el Vertex Array Object (VAO) para el tetraedro
+  GLuint vao2 = 0;
+  glGenVertexArrays(1, &vao2);
 
-// Crear y vincular el Vertex Buffer Object (VBO) para el tetraedro
-GLuint vbo2 = 0;
-glGenBuffers(1, &vbo2);
-glBindBuffer(GL_ARRAY_BUFFER, vbo2);
-glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_positions_tetraedro), vertex_positions_tetraedro, GL_STATIC_DRAW);
+  // Crear y vincular el Vertex Buffer Object (VBO) para el tetraedro
+  GLuint vbo2 = 0;
+  glGenBuffers(1, &vbo2);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo2);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_positions_tetraedro), vertex_positions_tetraedro, GL_STATIC_DRAW);
 
-// Especificar los atributos de vértice para el tetraedro
-// 0: posición del vértice (x, y, z)
-glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-glEnableVertexAttribArray(0);
+  // Especificar los atributos de vértice para el tetraedro
+  // 0: posición del vértice (x, y, z)
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+  glEnableVertexAttribArray(0);
 
-// 1: normales de vértice (x, y, z)
-glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-glEnableVertexAttribArray(1);
+  // 1: normales de vértice (x, y, z)
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+  glEnableVertexAttribArray(1);
 
-// Desvincular el VBO y el VAO
-glBindBuffer(GL_ARRAY_BUFFER, 0);
-glBindVertexArray(0);
+  // 2: text coord (s, t)
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(6 * sizeof(float)));
+  glEnableVertexAttribArray(2);
 
-// ...
+  // Desvincular el VBO y el VAO
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindVertexArray(0);
 
-// Para renderizar el tetraedro
+  // ...
+
+  // Para renderizar el tetraedro
 
   // Uniforms
   // - Model matrix
@@ -320,12 +335,12 @@ glBindVertexArray(0);
 
 
   material_shininess_location = glGetUniformLocation(shader_program, "material.shininess");
-  material_ambient_location = glGetUniformLocation(shader_program, "material.ambient");
-  material_diffuse_location = glGetUniformLocation(shader_program, "material.diffuse");
   material_specular_location = glGetUniformLocation(shader_program, "material.specular");
 
+  // Cargamos la textura
+  diffuse_map = load_textura("diffuse.png");
 
- // Tetraedro:
+  // Tetraedro:
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_positions_tetraedro), vertex_positions_tetraedro, GL_STATIC_DRAW);
 
   light_position_location2 = glGetUniformLocation(shader_program, "light2.position");
@@ -335,7 +350,7 @@ glBindVertexArray(0);
 
   camera_position_location = glGetUniformLocation(shader_program, "view_pos");
 
-// Render loop
+  // Render loop
   while(!glfwWindowShouldClose(window)) {
 
     processInput(window);
@@ -415,8 +430,6 @@ void render(double currentTime) {
   glUniform3f(light_specular_location2, light_specular.x, light_specular.y, light_specular.z);
 
   glUniform1f(material_shininess_location, material_shininess);
-  glUniform3f(material_ambient_location, material_ambient.x, material_ambient.y, material_ambient.z);
-  glUniform3f(material_diffuse_location, material_diffuse.x, material_diffuse.y, material_diffuse.z);
   glUniform3f(material_specular_location, material_specular.x, material_specular.y, material_specular.z);
 
   glUniform3f(camera_position_location, camera_pos.x, camera_pos.y, camera_pos.z);
@@ -427,6 +440,11 @@ void render(double currentTime) {
   glUniformMatrix4fv(proj_location, 1, GL_FALSE, &proj_matrix[0][0]);
 
   glUniformMatrix4fv(normal_location, 1, GL_FALSE, &normal_matrix[0][0]);
+
+  // Texture binding
+  glActiveTexture(GL_TEXTURE0);
+  // Especificamos que se utiliza la textura diffuse_map 
+  glBindTexture(GL_TEXTURE_2D, diffuse_map);
 
   glDrawArrays(GL_TRIANGLES, 0, 36);
 
@@ -455,8 +473,12 @@ void render(double currentTime) {
   glUniformMatrix4fv(proj_location, 1, GL_FALSE, &proj_matrix[0][0]);
   glUniformMatrix4fv(normal_location, 1, GL_FALSE, &normal_matrix[0][0]);
 
+  glActiveTexture(GL_TEXTURE0);
+  // Especificamos que se utiliza la textura diffuse_map 
+  glBindTexture(GL_TEXTURE_2D, diffuse_map);
+
   glBindVertexArray(vao2);
-  glDrawArrays(GL_TRIANGLES, 0, 12);
+  glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 
 void processInput(GLFWwindow *window) {
@@ -469,4 +491,46 @@ void glfw_window_size_callback(GLFWwindow* window, int width, int height) {
   gl_width = width;
   gl_height = height;
   printf("New viewport: (width: %d, height: %d)\n", width, height);
+}
+
+// Funcion para cargar la textura mediante un path (https://learnopengl.com/Getting-started/Textures)
+unsigned int load_textura(char const *path){
+
+  unsigned int texture;
+  glGenTextures(1, &texture);
+
+  int width, height, comp;
+
+  // Indicamos en el path la imagen que queremos cargar como textura
+  unsigned char *data = stbi_load(path, &width, &height, &comp, 0);
+
+  if (data) {
+    
+    GLenum format;
+    
+    // Se comprueba si es una textura está en un canal de color u otro ya que 
+    // para OpenGL se escribe "rojo" para uno, "rojo/verde" para dos y así sucesivamente.
+    if (comp == 1)
+      format = GL_RED;
+    else if (comp == 3)
+      format = GL_RGB;
+    else if (comp == 4)
+      format = GL_RGBA;
+
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    stbi_image_free(data);
+  } else {
+
+    printf("Texture failed to load");
+    stbi_image_free(data);
+  }
+  return texture;
 }
