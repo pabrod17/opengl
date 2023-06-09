@@ -67,6 +67,7 @@ const GLfloat material_shininess = 32.0f;
 
 // Textura
 unsigned int diffuse_map;
+unsigned int specular_map;
 
 int main() {
   // start GL context and O/S window using the GLFW helper library
@@ -303,7 +304,8 @@ int main() {
   glEnableVertexAttribArray(1);
 
   // 2: text coord (s, t)
-  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
+  //glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
   glEnableVertexAttribArray(2);
 
   // Desvincular el VBO y el VAO
@@ -339,6 +341,7 @@ int main() {
 
   // Cargamos la textura
   diffuse_map = load_textura("diffuse.png");
+  specular_map = load_textura("specular.png");
 
   // Tetraedro:
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_positions_tetraedro), vertex_positions_tetraedro, GL_STATIC_DRAW);
@@ -430,7 +433,7 @@ void render(double currentTime) {
   glUniform3f(light_specular_location2, light_specular.x, light_specular.y, light_specular.z);
 
   glUniform1f(material_shininess_location, material_shininess);
-  glUniform3f(material_specular_location, material_specular.x, material_specular.y, material_specular.z);
+  glUniform1i(material_specular_location, 1);
 
   glUniform3f(camera_position_location, camera_pos.x, camera_pos.y, camera_pos.z);
 
@@ -445,6 +448,10 @@ void render(double currentTime) {
   glActiveTexture(GL_TEXTURE0);
   // Especificamos que se utiliza la textura diffuse_map 
   glBindTexture(GL_TEXTURE_2D, diffuse_map);
+
+  // Activar unidad de textura specular
+  glActiveTexture(GL_TEXTURE1);
+  glBindTexture(GL_TEXTURE_2D, specular_map);
 
   glDrawArrays(GL_TRIANGLES, 0, 36);
 
@@ -467,6 +474,7 @@ void render(double currentTime) {
   normal_matrix = glm::transpose(glm::inverse(glm::mat3(model_matrix)));
 
   glUniform1f(material_shininess_location, material_shininess);
+  glUniform1i(material_specular_location, 1);
 
   glUniformMatrix4fv(model_location, 1, GL_FALSE, &model_matrix[0][0]);
   glUniformMatrix4fv(view_location, 1, GL_FALSE, &view_matrix[0][0]);
@@ -476,6 +484,10 @@ void render(double currentTime) {
   glActiveTexture(GL_TEXTURE0);
   // Especificamos que se utiliza la textura diffuse_map 
   glBindTexture(GL_TEXTURE_2D, diffuse_map);
+
+  // Activar unidad de textura specular
+  glActiveTexture(GL_TEXTURE1);
+  glBindTexture(GL_TEXTURE_2D, specular_map);
 
   glBindVertexArray(vao2);
   glDrawArrays(GL_TRIANGLES, 0, 36);
