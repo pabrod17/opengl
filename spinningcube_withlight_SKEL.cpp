@@ -60,9 +60,6 @@ glm::vec3 light_pos2(-10.0f, 1.0f, 0.5f);
 
 // Material
 glm::vec3 material_specular(0.5f, 0.5f, 0.5f);
-
-//GLint material_diffuse = 0;
-//GLint material_specular = 1;
 const GLfloat material_shininess = 32.0f;
 
 // Textura
@@ -229,35 +226,7 @@ int main() {
      0.25f,  0.25f, -0.25f,  0.0f, 1.0f, 0.0f,   1.0f, 0.0f,  // 3
   };
 
-  // Tetraedro to be rendered
-  // Cube to be rendered
-  //
-  //           3
-  //
-  //           1   
-  //     
-  //        6       5
-  //
-  const GLfloat vertex_positions_tetraedro[] = {
-
-    //positions                   //Normals             // Texture
-    0.0f,  0.25f, -0.15f,        0.0f, -1.0f, 0.0f,     0.5f,  0.25f,   // 3
-    0.0f,  -0.25f,  0.30f,       0.0f, -1.0f, 0.0f,     0.0f,  0.25f,   // 6
-    -0.25f, -0.25f, -0.15f,      0.0f, -1.0f, 0.0f,     0.0f,  0.25f,   // 1
-
-    0.0f,  0.25f, -0.15f,        0.0f, -1.0f, 0.0f,     0.5f,  0.25f,   // 3
-    -0.25f, -0.25f, -0.15f,      0.0f, -1.0f, 0.0f,     0.0f,  0.25f,   // 1
-    0.25f, -0.25f,  -0.15f,      0.0f, -1.0f, 0.0f,     0.0f,  0.25f,   // 5
-
-    0.0f,  0.25f, -0.15f,        0.0f, -1.0f, 0.0f,     0.5f,  0.25f,   // 3
-    0.0f,  -0.25f,  0.30f,       0.0f, -1.0f, 0.0f,     0.25f, 0.5f,    // 6
-    0.25f, -0.25f,  -0.15f,      0.0f, -1.0f, 0.0f,     0.0f,  0.25f,   // 5
-
-    0.0f,  -0.25f,  0.30f,       0.0f, -1.0f, 0.0f,     0.0f,  0.25f,   // 6
-    -0.25f, -0.25f, -0.15f,      0.0f, -1.0f, 0.0f,     0.0f,  0.25f,   // 1
-    0.25f, -0.25f,  -0.15f,      0.0f, -1.0f, 0.0f,     0.0f,  0.25f,   // 5
-
-  };
+  // CUBE
 
   // Vertex Buffer Object (for vertex coordinates)
   GLuint vbo = 0;
@@ -283,6 +252,36 @@ int main() {
 
   // Unbind vao
   glBindVertexArray(0);
+  
+  //TETRAEDRO
+  //
+  //           3
+  //
+  //           1   
+  //     
+  //        6       5
+  //
+  const GLfloat vertex_positions_tetraedro[] = {
+
+    //positions                   //Normals             // Texture
+    0.0f,  0.25f, -0.15f,        -1.0f, 0.0f, 0.0f,     0.5f,  1.0f,   // 3
+    0.0f,  -0.25f,  0.30f,       -1.0f, 0.0f, 0.0f,     1.0f,  0.0f,   // 6
+    -0.25f, -0.25f, -0.15f,      -1.0f, 0.0f, 0.0f,     0.0f,  0.0f,   // 1
+
+    0.0f,  0.25f, -0.15f,        1.0f, 0.0f, 0.0f,      0.5f,  1.0f,    // 3
+    -0.25f, -0.25f, -0.15f,      1.0f, 0.0f, 0.0f,      1.0f,  0.0f,    // 1
+    0.25f, -0.25f,  -0.15f,      1.0f, 0.0f, 0.0f,      0.0f,  0.0f,    // 5
+    
+
+    0.0f,  -0.25f,  0.30f,       0.0f, 0.0f, -1.0f,     0.0f,  0.0f,    // 6
+    0.25f, -0.25f,  -0.15f,      0.0f, 0.0f, -1.0f,     1.0f,  0.0f,    // 5
+    0.0f,  0.25f, -0.15f,        0.0f, 0.0f, -1.0f,     0.5f,  1.0f,    // 3
+
+    0.0f,  -0.25f,  0.30f,       0.0f, -1.0f, 0.0f,     0.0f,  0.0f,    // 6
+    -0.25f, -0.25f, -0.15f,      0.0f, -1.0f, 0.0f,     1.0f,  0.0f,    // 1
+    0.25f, -0.25f,  -0.15f,      0.0f, -1.0f, 0.0f,     0.5f,  1.0f,    // 5
+  };
+
 
   // Crear y vincular el Vertex Array Object (VAO) para el tetraedro
   GLuint vao2 = 0;
@@ -304,17 +303,15 @@ int main() {
   glEnableVertexAttribArray(1);
 
   // 2: text coord (s, t)
-  //glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
-  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
   glEnableVertexAttribArray(2);
 
   // Desvincular el VBO y el VAO
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 
-  // ...
 
-  // Para renderizar el tetraedro
+  // CUBE
 
   // Uniforms
   // - Model matrix
@@ -342,6 +339,8 @@ int main() {
   // Cargamos la textura
   diffuse_map = load_textura("diffuse.png");
   specular_map = load_textura("specular.png");
+  
+  
 
   // Tetraedro:
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_positions_tetraedro), vertex_positions_tetraedro, GL_STATIC_DRAW);
@@ -381,22 +380,17 @@ void render(double currentTime) {
   glBindVertexArray(vao);
 
   glm::mat4 model_matrix, view_matrix, proj_matrix;
-
   glm::mat3 normal_matrix;
 
   view_matrix = glm::lookAt(                 camera_pos,  // pos
                             glm::vec3(0.0f, 0.0f, 0.0f),  // target
                             glm::vec3(0.0f, 1.0f, 0.0f)); // up
 
-  // Moving cube
-  // model_matrix = glm::rotate(model_matrix,
-  //   [...]
+  // MOVING CUBE
+  
+  // Model matrix - rotación
   model_matrix = glm::mat4(1.f);
   model_matrix = glm::translate(model_matrix, glm::vec3(.75f, 0.0f, 0.0f));
-  //model_matrix = glm::translate(model_matrix,
-  //                           glm::vec3(sinf(2.1f * f) * 0.5f,
-  //                                     cosf(1.7f * f) * 0.5f,
-  //                                     sinf(1.3f * f) * cosf(1.5f * f) * 2.0f));
   model_matrix = glm::rotate(model_matrix,
                       glm::radians((float)currentTime * 20.0f),
                       glm::vec3(0.0f, 1.0f, 0.0f));
@@ -404,24 +398,15 @@ void render(double currentTime) {
                       glm::radians((float)currentTime * 40.0f),
                       glm::vec3(1.0f, 0.0f, 0.0f));
 
-  //glUniformMatrix4fv(model_location, 1, GL_FALSE, glm::value_ptr(model_matrix));
-
-  //glUniformMatrix4fv(model_location, 1, GL_FALSE, &model_matrix[0][0]);
-
-  // Projection
-  // proj_matrix = glm::perspective(glm::radians(50.0f),
-  //   [...]
+  // Projection matrix - perspective
   proj_matrix = glm::perspective(glm::radians(50.0f),
                                  (float) gl_width / (float) gl_height,
                                  0.1f, 1000.0f);
 
-
   // Normal matrix: normal vectors to world coordinates
   normal_matrix = glm::transpose(glm::inverse(glm::mat3(model_matrix)));
 
-  //glUniformMatrix4fv(proj_location, 1, GL_FALSE, glm::value_ptr(proj_matrix));
-  
- 
+  // Load lighting
   glUniform3f(light_ambient_location, light_ambient.x, light_ambient.y, light_ambient.z);
   glUniform3f(light_position_location, light_pos.x, light_pos.y, light_pos.z);
   glUniform3f(light_diffuse_location, light_diffuse.x, light_diffuse.y, light_diffuse.z);
@@ -432,9 +417,11 @@ void render(double currentTime) {
   glUniform3f(light_diffuse_location2, light_diffuse.x, light_diffuse.y, light_diffuse.z);
   glUniform3f(light_specular_location2, light_specular.x, light_specular.y, light_specular.z);
 
+  // Material
   glUniform1f(material_shininess_location, material_shininess);
   glUniform1i(material_specular_location, 1);
 
+  // Camera position
   glUniform3f(camera_position_location, camera_pos.x, camera_pos.y, camera_pos.z);
 
 
@@ -446,30 +433,30 @@ void render(double currentTime) {
 
   // Texture binding
   glActiveTexture(GL_TEXTURE0);
-  // Especificamos que se utiliza la textura diffuse_map 
   glBindTexture(GL_TEXTURE_2D, diffuse_map);
 
   // Activar unidad de textura specular
   glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, specular_map);
 
+  // Dibujar cubo
   glDrawArrays(GL_TRIANGLES, 0, 36);
 
   // tetraedro
 
   model_matrix = glm::mat4(1.f);
   model_matrix = glm::translate(model_matrix, glm::vec3(-.75f, 0.0f, 0.0f));
-
-  proj_matrix = glm::perspective(glm::radians(50.0f),
-                                 (float) gl_width / (float) gl_height,
-                                 0.1f, 1000.0f);
-
   model_matrix = glm::rotate(model_matrix,
                       glm::radians((float)currentTime * 20.0f),
                       glm::vec3(0.0f, 1.0f, 0.0f));
   model_matrix = glm::rotate(model_matrix,
                       glm::radians((float)currentTime * 40.0f),
                       glm::vec3(1.0f, 0.0f, 0.0f));
+                      
+  proj_matrix = glm::perspective(glm::radians(50.0f),
+                                 (float) gl_width / (float) gl_height,
+                                 0.1f, 1000.0f);
+                      
   // Normal matrix: normal vectors to world coordinates
   normal_matrix = glm::transpose(glm::inverse(glm::mat3(model_matrix)));
 
@@ -482,7 +469,6 @@ void render(double currentTime) {
   glUniformMatrix4fv(normal_location, 1, GL_FALSE, &normal_matrix[0][0]);
 
   glActiveTexture(GL_TEXTURE0);
-  // Especificamos que se utiliza la textura diffuse_map 
   glBindTexture(GL_TEXTURE_2D, diffuse_map);
 
   // Activar unidad de textura specular
@@ -490,6 +476,8 @@ void render(double currentTime) {
   glBindTexture(GL_TEXTURE_2D, specular_map);
 
   glBindVertexArray(vao2);
+  
+  // Dibujar tetraedros
   glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 
