@@ -33,9 +33,13 @@ Engadide tamén un mapa especular, que permita distintos comportamentos da compo
 * Diapositiva 13 (de 28) en igm_render_teoria3.pdf
 * Ver tamén mapeado de texturas a partir de diapositiva 7 en igm_render_lab3.pdf
 
+En este apartado se realizó una mejora de la textura del tetraedro con respecto al ejercicio 3.
+
 ### Quinta parte (ata + 2 puntos, substituíndo opcionalmente algunha das partes 2, 3 ou 4)
 
 Engadide unha segunda cámara, permitindo cun atallo de teclado conmutar o render entre as dúas cámaras.
+
+* Para realizar el cambio de cámaras utilizamos la letra "C".
 
 ### Entregables
 

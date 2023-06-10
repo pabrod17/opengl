@@ -26,6 +26,7 @@ int gl_height = 480;
 
 void glfw_window_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
+void updateCameraPosition(GLFWwindow *window);
 void render(double);
 
 // Metodo para cargar la textura
@@ -46,8 +47,14 @@ GLint camera_position_location;
 const char *vertexFileName = "spinningcube_withlight_vs_SKEL.glsl";
 const char *fragmentFileName = "spinningcube_withlight_fs_SKEL.glsl";
 
+glm::mat4 view_matrix;
+//updateCameraPosition vars
+bool useFirstCamera = true;
+bool teclaPulsada = false;
+
 // Camera
 glm::vec3 camera_pos(0.0f, 0.0f, 3.0f);
+glm::vec3 camera_pos2(0.0f, 0.0f, -2.0f);
 
 // Lighting
 glm::vec3 light_pos(10.0f, 1.0f, 0.5f);
@@ -357,6 +364,8 @@ int main() {
 
     processInput(window);
 
+    updateCameraPosition(window);
+
     render(glfwGetTime());
 
     glfwSwapBuffers(window);
@@ -379,12 +388,8 @@ void render(double currentTime) {
   glUseProgram(shader_program);
   glBindVertexArray(vao);
 
-  glm::mat4 model_matrix, view_matrix, proj_matrix;
+  glm::mat4 model_matrix, proj_matrix;
   glm::mat3 normal_matrix;
-
-  view_matrix = glm::lookAt(                 camera_pos,  // pos
-                            glm::vec3(0.0f, 0.0f, 0.0f),  // target
-                            glm::vec3(0.0f, 1.0f, 0.0f)); // up
 
   // MOVING CUBE
   
@@ -484,6 +489,29 @@ void render(double currentTime) {
 void processInput(GLFWwindow *window) {
   if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     glfwSetWindowShouldClose(window, 1);
+}
+
+//Para cambiar entre las posiciones de la camara usar la tecla C.
+void updateCameraPosition(GLFWwindow *window) {
+
+  if(glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS && !teclaPulsada) {
+    teclaPulsada = true;
+    useFirstCamera = !useFirstCamera;
+  } else if(glfwGetKey(window, GLFW_KEY_C) == GLFW_RELEASE) {
+    teclaPulsada = false;
+  }
+
+  if (useFirstCamera) {
+      // Configurar la primera cámara
+      view_matrix = glm::lookAt(                 camera_pos,  // pos
+                                glm::vec3(0.0f, 0.0f, 0.0f),  // target
+                                glm::vec3(0.0f, 1.0f, 0.0f)); // up
+  } else {
+      // Configurar la segunda cámara
+      view_matrix = glm::lookAt(                 camera_pos2,  // pos
+                                glm::vec3(0.0f, 0.0f, 0.0f),  // target
+                                glm::vec3(0.0f, 1.0f, 0.0f)); // up
+    }
 }
 
 // Callback function to track window size and update viewport
